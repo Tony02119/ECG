@@ -1,0 +1,29 @@
+services:
+  webapp:
+    container_name: ecg-prediction-ia_front
+    image: ecg-prediction-front:1.0.0
+    build: ./front-vue
+    volumes:
+      - ./front-vue:/app
+    ports:
+      - "3000:80" # Spécifie explicitement le mapping du port
+    # networks:
+    #   - compute_network
+    #   - reverseproxy_network
+    restart: unless-stopped
+
+  ecg-prediction-back:
+    container_name: ecg-prediction-back
+    image: ecg-prediction-ia:latest
+    build: ./back-python/Dockerfile-dev
+    # No port exposed, as it will be accessed only by the front end
+    volumes:
+      - ./back-python:/app
+
+# networks:
+#   reverseproxy_network:
+#     name: reverseproxy_network
+#     external: true
+#   compute_network:
+#     name: compute_network
+#     external: true
